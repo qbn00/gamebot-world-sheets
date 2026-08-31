@@ -79,22 +79,43 @@ a:hover { text-decoration: underline; }
 .connect a.connect-thumb img { width: 220px; max-width: 100%; margin: 0; cursor: zoom-in; border: 1px solid var(--border); border-radius: 6px; }
 .connect a.connect-thumb:hover img { border-color: var(--link); }
 .connect code { font-size: 0.9em; }
-.connect-password-notice {
+.connect-info-panel {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
   margin: 0 0 16px;
-  padding: 14px 16px;
-  border: 2px solid #e6a700;
-  border-radius: 8px;
-  background: rgba(230, 167, 0, 0.14);
-  font-size: 1rem;
+  padding: 12px 14px;
+  border: 1px solid rgba(56, 139, 253, 0.35);
+  border-left: 4px solid #388bfd;
+  border-radius: 4px;
+  background: rgba(56, 139, 253, 0.1);
+  font-size: 0.95rem;
   line-height: 1.5;
 }
-.connect-password-notice-title {
-  display: block;
-  font-size: 1.15rem;
+.connect-info-icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin-top: 1px;
+  border-radius: 50%;
+  background: #388bfd;
+  color: #fff;
+  font-size: 0.72rem;
   font-weight: 700;
-  margin-bottom: 8px;
+  font-style: italic;
+  font-family: Georgia, "Times New Roman", serif;
+  line-height: 20px;
+  text-align: center;
 }
-.connect-password-notice strong { color: #fff; font-weight: 700; }
+.connect-info-body { min-width: 0; }
+.connect-info-body p { margin: 0; }
+.connect-info-title {
+  margin: 0 0 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #e6edf3;
+}
+.connect-info-body strong { color: #fff; font-weight: 600; }
 @media (max-width: 640px) {
   .connect-grid { grid-template-columns: 1fr; }
 }
