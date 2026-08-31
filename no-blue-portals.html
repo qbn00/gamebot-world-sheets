@@ -62,17 +62,16 @@ a:hover { text-decoration: underline; }
 .connect-steps { margin: 0; padding-left: 1.25rem; font-size: 0.9rem; line-height: 1.5; }
 .connect-steps li { margin: 0 0 12px; }
 .connect-steps li:last-child { margin-bottom: 0; }
-.connect-copy {
-  margin: 8px 0 0;
-  padding: 10px 12px;
+.connect-fields { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.connect-label { display: block; font-size: 0.8rem; color: var(--muted); margin-bottom: 2px; }
+.connect-value {
+  display: inline-block;
+  padding: 4px 8px;
   background: var(--bg);
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 4px;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.85rem;
-  line-height: 1.45;
-  white-space: pre-wrap;
-  overflow-x: auto;
+  font-size: 0.9rem;
   user-select: all;
   cursor: text;
 }
@@ -101,7 +100,7 @@ a:hover { text-decoration: underline; }
       <h2>How to connect</h2>
       <div class="connect-grid">
         <div class="connect-item">
-          <a class="connect-thumb" href="assets/no-blue-portals/add-server.png" target="_blank" rel="noopener noreferrer"><img src="assets/no-blue-portals/add-server.png" alt="Add server to favorites"></a>
+          <a class="connect-thumb" href="assets/no-blue-portals/add-server.png" target="_blank" rel="noopener noreferrer"><img src="assets/no-blue-portals/add-server.png" alt="Add favorite server screen"></a>
         </div>
         <div class="connect-item">
           <a class="connect-thumb" href="assets/no-blue-portals/connect.png" target="_blank" rel="noopener noreferrer"><img src="assets/no-blue-portals/connect.png" alt="Login screen"></a>
@@ -109,15 +108,14 @@ a:hover { text-decoration: underline; }
       </div>
       <ol class="connect-steps">
         <li>In the main menu, open <strong>Favorites</strong> and add a server with these settings.
-          <pre class="connect-copy">Server name: No Blue Portals
-IP / Domain: gamebot.qbn.tv
-Port: 16281
-Server password: qbnrox!!1</pre>
+          <ul class="connect-fields">
+<li><span class="connect-label">Server name</span><code class="connect-value">No Blue Portals</code></li>
+<li><span class="connect-label">IP / Domain</span><code class="connect-value">gamebot.qbn.tv</code></li>
+<li><span class="connect-label">Port</span><code class="connect-value">16281</code></li>
+<li><span class="connect-label">Server password</span><code class="connect-value">qbnrox!!1</code></li>
+</ul>
         </li>
-        <li>Connect with your username and the server password. Check <strong>Remember password</strong> and <strong>Use Steam Relay</strong>.
-          <pre class="connect-copy">Remember password: on
-Use Steam Relay: on</pre>
-        </li>
+        <li>Connect with your username and the server password. Check <strong>Remember password</strong> and <strong>Use Steam Relay</strong>.</li>
       </ol>
     </section>
     
