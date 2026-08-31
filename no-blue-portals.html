@@ -80,7 +80,8 @@ a:hover { text-decoration: underline; }
 .connect a.connect-thumb:hover img { border-color: var(--link); }
 .connect code { font-size: 0.9em; }
 .connect-note { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border); }
-.connect-note-text { margin: 0 0 10px; font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
+.connect-note-text { margin: 10px 0 0; font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
+.connect-note .connect-thumb { margin: 0 auto; }
 .connect-note .connect-thumb img { max-width: min(100%, 520px); width: 100%; height: auto; }
 @media (max-width: 640px) {
   .connect-grid { grid-template-columns: 1fr; }
@@ -121,8 +122,8 @@ a:hover { text-decoration: underline; }
       </ol>
       
       <div class="connect-note">
-        <p class="connect-note-text">If you see a red warning that port 16282 is closed while loading, you can ignore it. The port is open — this is a known cosmetic bug in the game client.</p>
         <a class="connect-thumb" href="assets/no-blue-portals/port-warning.png" target="_blank" rel="noopener noreferrer"><img src="assets/no-blue-portals/port-warning.png" alt="Port 16282 closed warning during load"></a>
+        <p class="connect-note-text">If you see a red warning that port 16282 is closed while loading, you can ignore it. The port is open — this is a known cosmetic bug in the game client.</p>
       </div>
     </section>
     
