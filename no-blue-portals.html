@@ -79,6 +79,9 @@ a:hover { text-decoration: underline; }
 .connect a.connect-thumb img { width: 220px; max-width: 100%; margin: 0; cursor: zoom-in; border: 1px solid var(--border); border-radius: 6px; }
 .connect a.connect-thumb:hover img { border-color: var(--link); }
 .connect code { font-size: 0.9em; }
+.connect-note { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border); }
+.connect-note-text { margin: 0 0 10px; font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
+.connect-note .connect-thumb img { max-width: min(100%, 520px); width: 100%; height: auto; }
 @media (max-width: 640px) {
   .connect-grid { grid-template-columns: 1fr; }
 }
@@ -116,6 +119,11 @@ a:hover { text-decoration: underline; }
         </li>
         <li>Reach out to qbn to get a whitelisted user account. Log in with that username and password. Check <strong>Remember password</strong> and <strong>Use Steam Relay</strong>.</li>
       </ol>
+      
+      <div class="connect-note">
+        <p class="connect-note-text">If you see a red warning that port 16282 is closed while loading, you can ignore it. The port is open — this is a known cosmetic bug in the game client.</p>
+        <a class="connect-thumb" href="assets/no-blue-portals/port-warning.png" target="_blank" rel="noopener noreferrer"><img src="assets/no-blue-portals/port-warning.png" alt="Port 16282 closed warning during load"></a>
+      </div>
     </section>
     
     <p class="footer">Omitted keys match vanilla Apocalypse / stock ini defaults. Password and RCON values not shown.</p>
