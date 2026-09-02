@@ -115,6 +115,52 @@ a:hover { text-decoration: underline; }
 .connect a.connect-thumb { display: block; margin: 0 auto; width: fit-content; }
 .connect a.connect-thumb img { width: 220px; max-width: 100%; margin: 0; cursor: zoom-in; border: 1px solid var(--border); border-radius: 6px; }
 .connect a.connect-thumb:hover img { border-color: var(--link); }
+.screenshot-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.screenshot-modal.open { display: flex; }
+.screenshot-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.78);
+  cursor: zoom-out;
+}
+.screenshot-modal-dialog {
+  position: relative;
+  z-index: 1;
+  max-width: min(96vw, 920px);
+  max-height: 90vh;
+}
+.screenshot-modal-dialog img {
+  display: block;
+  max-width: 100%;
+  max-height: 90vh;
+  width: auto;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+.screenshot-modal-close {
+  position: absolute;
+  top: -14px;
+  right: -14px;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.screenshot-modal-close:hover { border-color: var(--link); color: var(--link); }
 .connect code { font-size: 0.9em; }
 .connect-note { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border); }
 .connect-note-text { margin: 10px 0 0; font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
@@ -261,7 +307,7 @@ html { scroll-behavior: smooth; }
     
     <section class="hero-panel rules">
       <h2>Rules</h2>
-      <ul><li>Play in good faith. We are here to have fun.</li><li>No griefing, stealing from teammates, or sabotaging the group base.</li><li>Respect the whitelist. Do not share accounts, passwords, or server access.</li><li>Use in-game VOIP only while playing. No Discord calls for in-game coordination.</li><li>Craft radios and walkie-talkies, or get used to the solo life.</li></ul>
+      <ul><li>Play in good faith. We are here to have fun.</li><li>No griefing, stealing from teammates, or sabotaging the group base.</li><li>You must be in the <a href="https://discord.gg/zvFzZhgwnu" target="_blank" rel="noopener noreferrer">Gentlemen Gaming</a> discord server for updates and announcements.</li><li>Respect the whitelist. Do not share accounts, passwords, or server access.</li><li>Use in-game VOIP only while playing. No Discord calls for in-game coordination.</li><li>Craft radios and walkie-talkies, or get used to the solo life.</li></ul>
     </section>
     
     <section class="hero-panel connect-jump">
@@ -281,10 +327,10 @@ html { scroll-behavior: smooth; }
     <section class="connect" id="connect">
       <h2>How to connect</h2>
       <div class="connect-grid">
-        <div class="connect-item"><a class="connect-thumb" href="assets/no-blue-portals/add-server.png" target="_blank" rel="noopener noreferrer"><img src="assets/no-blue-portals/add-server.png" alt="Add favorite server screen"></a></div><div class="connect-item"><a class="connect-thumb" href="assets/no-blue-portals/steam-menu.png" target="_blank" rel="noopener noreferrer"><img src="assets/no-blue-portals/steam-menu.png" alt="Steam profile menu"></a></div><div class="connect-item"><a class="connect-thumb" href="assets/no-blue-portals/steam-account.png" target="_blank" rel="noopener noreferrer"><img src="assets/no-blue-portals/steam-account.png" alt="Steam account details"></a></div><div class="connect-item"><a class="connect-thumb" href="assets/no-blue-portals/connect.png" target="_blank" rel="noopener noreferrer"><img src="assets/no-blue-portals/connect.png" alt="Add New Account login screen"></a></div>
+        <div class="connect-item"><a class="connect-thumb screenshot-modal-open" href="assets/no-blue-portals/add-server.png" data-alt="Add favorite server screen"><img src="assets/no-blue-portals/add-server.png" alt="Add favorite server screen"></a></div><div class="connect-item"><a class="connect-thumb screenshot-modal-open" href="assets/no-blue-portals/connect.png" data-alt="Add New Account login screen"><img src="assets/no-blue-portals/connect.png" alt="Add New Account login screen"></a></div>
       </div>
       <ol class="connect-steps">
-        <li>In the main menu, open <strong>Favorites</strong> and add a server with these settings (see first screenshot).
+        <li>In the main menu, open <strong>Favorites</strong> and add a server with these settings (<a class="screenshot-modal-open" href="assets/no-blue-portals/add-server.png" data-alt="Add favorite server screen">screenshot</a>).
           <ul class="connect-fields">
 <li><span class="connect-label">Server name</span><code class="connect-value">No Blue Portals</code></li>
 <li><span class="connect-label">IP / Domain</span><code class="connect-value">gamebot.qbn.tv</code></li>
@@ -295,18 +341,26 @@ html { scroll-behavior: smooth; }
         <li>To get on the whitelist, send your <strong>Steam ID</strong>:
           <ol>
             <li>Open <strong>Steam</strong> and make sure you are signed in.</li>
-            <li>Click your <strong>profile name</strong> in the top menu, then <strong>Account details</strong> (see screenshot 2).</li>
-            <li>Copy the <strong>17-digit Steam ID</strong> shown at the top of the page (see screenshot 3).</li>
-            <li>Post that ID in the <strong>#project-zomboid</strong> chat in the Gentlemen Gaming discord and @ <strong>qbn</strong>.</li>
+            <li>Click your <strong>profile name</strong> in the top menu, then <strong>Account details</strong> (<a class="screenshot-modal-open" href="assets/no-blue-portals/steam-menu.png" data-alt="Steam profile menu">screenshot</a>).</li>
+            <li>Copy the <strong>17-digit Steam ID</strong> shown at the top of the page (<a class="screenshot-modal-open" href="assets/no-blue-portals/steam-account.png" data-alt="Steam account details">screenshot</a>).</li>
+            <li>Post that ID in the <strong><a href="https://discord.com/channels/423919761655726090/1168978158557601792" target="_blank" rel="noopener noreferrer">#project-zomboid</a></strong> chat in the <a href="https://discord.gg/zvFzZhgwnu" target="_blank" rel="noopener noreferrer">Gentlemen Gaming</a> discord and @ <strong>qbn</strong>. This ID is a public value any Steam friend can fetch, so not to worry.</li>
           </ol>
         </li>
-        <li>Next, in Zomboid click <strong>Add New Account</strong>. Here you will self register by creating a username and password (see fourth screenshot). Check <strong>Remember password</strong> and <strong>Use Steam Relay</strong>, then click <strong>Save</strong>. Do not lose your username and password. You&apos;re welcome to create up to 3 &quot;accounts&quot; so you can have multiple characters.</li>
+        <li>Next, in Zomboid click <strong>Add New Account</strong>. Here you will self register by creating a username and password (<a class="screenshot-modal-open" href="assets/no-blue-portals/connect.png" data-alt="Add New Account login screen">screenshot</a>). Check <strong>Remember password</strong> and <strong>Use Steam Relay</strong>, then click <strong>Save</strong>. Do not lose your username and password. You&apos;re welcome to create up to 3 &quot;accounts&quot; so you can have multiple characters.</li>
       </ol>
       
       <div class="connect-note">
-        <a class="connect-thumb" href="assets/no-blue-portals/port-warning.png" target="_blank" rel="noopener noreferrer"><img src="assets/no-blue-portals/port-warning.png" alt="Port 16282 closed warning during load"></a>
+        <a class="connect-thumb screenshot-modal-open" href="assets/no-blue-portals/port-warning.png" data-alt="Port 16282 closed warning during load"><img src="assets/no-blue-portals/port-warning.png" alt="Port 16282 closed warning during load"></a>
         <p class="connect-note-text">If you see a red warning that port 16282 is closed while loading, you can ignore it. The port is open — this is a known cosmetic bug in the game client.</p>
       </div>
+      
+<div class="screenshot-modal" id="screenshot-modal" hidden>
+  <div class="screenshot-modal-backdrop" data-close></div>
+  <div class="screenshot-modal-dialog" role="dialog" aria-modal="true" aria-label="Screenshot">
+    <button type="button" class="screenshot-modal-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+</div>
     </section>
     
   </div>
@@ -345,6 +399,41 @@ html { scroll-behavior: smooth; }
         reveal();
       }
     });
+  });
+})();
+
+(function () {
+  var modal = document.getElementById("screenshot-modal");
+  if (!modal) return;
+  var img = modal.querySelector("img");
+  function openModal(src, alt) {
+    img.src = src;
+    img.alt = alt || "Screenshot";
+    modal.classList.add("open");
+    modal.removeAttribute("hidden");
+    document.body.style.overflow = "hidden";
+  }
+  function closeModal() {
+    modal.classList.remove("open");
+    modal.setAttribute("hidden", "");
+    img.removeAttribute("src");
+    document.body.style.overflow = "";
+  }
+  document.querySelectorAll(".screenshot-modal-open").forEach(function (el) {
+    el.addEventListener("click", function (e) {
+      e.preventDefault();
+      var thumb = el.querySelector("img");
+      openModal(
+        el.getAttribute("href"),
+        el.getAttribute("data-alt") || (thumb && thumb.getAttribute("alt")) || "Screenshot"
+      );
+    });
+  });
+  modal.querySelectorAll("[data-close], .screenshot-modal-close").forEach(function (el) {
+    el.addEventListener("click", closeModal);
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && modal.classList.contains("open")) closeModal();
   });
 })();
 </script>

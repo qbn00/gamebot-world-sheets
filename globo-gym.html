@@ -115,6 +115,52 @@ a:hover { text-decoration: underline; }
 .connect a.connect-thumb { display: block; margin: 0 auto; width: fit-content; }
 .connect a.connect-thumb img { width: 220px; max-width: 100%; margin: 0; cursor: zoom-in; border: 1px solid var(--border); border-radius: 6px; }
 .connect a.connect-thumb:hover img { border-color: var(--link); }
+.screenshot-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.screenshot-modal.open { display: flex; }
+.screenshot-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.78);
+  cursor: zoom-out;
+}
+.screenshot-modal-dialog {
+  position: relative;
+  z-index: 1;
+  max-width: min(96vw, 920px);
+  max-height: 90vh;
+}
+.screenshot-modal-dialog img {
+  display: block;
+  max-width: 100%;
+  max-height: 90vh;
+  width: auto;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+.screenshot-modal-close {
+  position: absolute;
+  top: -14px;
+  right: -14px;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.screenshot-modal-close:hover { border-color: var(--link); color: var(--link); }
 .connect code { font-size: 0.9em; }
 .connect-note { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border); }
 .connect-note-text { margin: 10px 0 0; font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
