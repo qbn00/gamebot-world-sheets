@@ -257,6 +257,19 @@ a:hover { text-decoration: underline; }
 }
 html { scroll-behavior: smooth; }
 #connect { scroll-margin-top: 16px; }
+.steam-id-warning {
+  margin: 12px 0 14px;
+  padding: 12px 14px;
+  border: 2px solid #e6a23c;
+  border-radius: 8px;
+  background: rgba(230, 162, 60, 0.12);
+  color: #ffd48a;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+}
+.steam-id-warning strong { color: #fff; }
 .hero-panel.connect-jump {
   text-align: center;
   padding: 26px 24px 28px;
@@ -339,6 +352,7 @@ html { scroll-behavior: smooth; }
 </ul>
         </li>
         <li>To get on the whitelist, send your <strong>Steam ID</strong>:
+          <p class="steam-id-warning">Your Steam ID is <strong>not</strong> your Steam friend code.</p>
           <ol>
             <li>Open <strong>Steam</strong> and make sure you are signed in.</li>
             <li>Click your <strong>profile name</strong> in the top menu, then <strong>Account details</strong> (<a class="screenshot-modal-open" href="assets/no-blue-portals/steam-menu.png" data-alt="Steam profile menu">screenshot</a>).</li>
