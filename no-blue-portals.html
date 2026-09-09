@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>No Blue Portals — server settings</title>
+  <meta property="og:title" content="No Blue Portals — Project Zomboid server">
+  <meta property="og:description" content="Hardcore Zomboid hosted by KenKnobi and qbn">
+  <meta name="description" content="Hardcore Zomboid hosted by KenKnobi and qbn">
+  <style>
+:root {
+  color-scheme: dark;
+  --bg: #141414;
+  --surface: #1c1c1c;
+  --text: #f0f0f0;
+  --muted: #a0a0a0;
+  --border: #333;
+  --stripe: #222;
+  --link: #6eb6ff;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.45 system-ui, -apple-system, Segoe UI, sans-serif;
+  padding: 24px 20px 48px;
+}
+.wrap { max-width: 1100px; margin: 0 auto; }
+h1 { font-size: 2.25rem; line-height: 1.1; margin: 0 0 8px; font-weight: 600; }
+.subtitle { font-size: 1.125rem; font-weight: 400; margin: 0 0 8px; color: var(--text); }
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.stat {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.stat-value {
+  font-size: 1.35rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.stat-emoji { font-size: 1.45rem; line-height: 1; }
+.stat-label {
+  color: var(--muted);
+  font-size: 0.8rem;
+  margin-top: 6px;
+  text-align: center;
+}
+section { margin: 24px 0; }
+h2 { font-size: 1.125rem; margin: 0 0 10px; font-weight: 600; }
+table { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+th, td { padding: 8px 12px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--border); }
+th { background: #252525; font-size: 0.8rem; color: var(--muted); }
+tr.striped td { background: var(--stripe); }
+tr:last-child td { border-bottom: 0; }
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.note { color: var(--muted); font-size: 0.85rem; margin: 0 0 8px; }
+.connect { margin: 0 0 28px; padding: 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; }
+.connect-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 20px; margin-bottom: 12px; }
+.connect-item { display: flex; flex-direction: column; align-items: center; }
+.connect-steps { margin: 0; padding-left: 1.25rem; font-size: 0.9rem; line-height: 1.5; }
+.connect-steps li { margin: 0 0 12px; }
+.connect-steps li:last-child { margin-bottom: 0; }
+.connect-steps ol {
+  margin: 8px 0 0;
+  padding-left: 1.25rem;
+  list-style-type: lower-alpha;
+}
+.connect-steps ol li { margin: 0 0 6px; }
+.connect-steps ol li:last-child { margin-bottom: 0; }
+.connect-fields { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.connect-label { display: block; font-size: 0.8rem; color: var(--muted); margin-bottom: 2px; }
+.connect-value {
+  display: inline-block;
+  padding: 4px 8px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.9rem;
+  user-select: all;
+  cursor: text;
+}
+.connect-value-secret {
+  cursor: pointer;
+  user-select: none;
+  color: var(--muted);
+  font-family: inherit;
+  font-style: italic;
+}
+.connect-value-secret:hover { border-color: var(--link); color: var(--text); }
+.connect-value-secret.revealed {
+  user-select: all;
+  cursor: text;
+  color: inherit;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-style: normal;
+}
+.connect a.connect-thumb { display: block; margin: 0 auto; width: fit-content; }
+.connect a.connect-thumb img { width: 220px; max-width: 100%; margin: 0; cursor: zoom-in; border: 1px solid var(--border); border-radius: 6px; }
+.connect a.connect-thumb:hover img { border-color: var(--link); }
+.screenshot-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.screenshot-modal.open { display: flex; }
+.screenshot-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.78);
+  cursor: zoom-out;
+}
+.screenshot-modal-dialog {
+  position: relative;
+  z-index: 1;
+  max-width: min(96vw, 920px);
+  max-height: 90vh;
+}
+.screenshot-modal-dialog img {
+  display: block;
+  max-width: 100%;
+  max-height: 90vh;
+  width: auto;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+.screenshot-modal-close {
+  position: absolute;
+  top: -14px;
+  right: -14px;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.screenshot-modal-close:hover { border-color: var(--link); color: var(--link); }
+.connect code { font-size: 0.9em; }
+.connect-note { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border); }
+.connect-note-text { margin: 10px 0 0; font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
+.connect-note .connect-thumb { margin: 0 auto; }
+.connect-note .connect-thumb img { max-width: min(100%, 520px); width: 100%; height: auto; }
+@media (max-width: 640px) {
+  .connect-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  body { padding: 16px 12px 32px; }
+  h1 { font-size: 1.75rem; }
+}
+.hero-panel {
+  margin: 0 0 24px;
+  padding: 18px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.hero-panel h2 {
+  margin: 0 0 12px;
+  font-size: 1.1rem;
+}
+.hero-panel ul {
+  margin: 0;
+  padding-left: 1.25rem;
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+.hero-panel li { margin: 0 0 8px; }
+.hero-panel li:last-child { margin-bottom: 0; }
+.starter-kit {
+  text-align: center;
+  padding: 22px 16px 26px;
+}
+.starter-kit h2 { text-align: center; }
+.starter-kit-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 18px 0;
+}
+.starter-kit-item {
+  flex: 0 0 20%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  box-sizing: border-box;
+  padding: 0 6px;
+}
+.starter-kit-emoji {
+  font-size: 4rem;
+  line-height: 1;
+}
+.starter-kit-name {
+  font-size: 0.88rem;
+  line-height: 1.25;
+}
+@media (max-width: 640px) {
+  .starter-kit-item { flex-basis: 33.33%; }
+  .starter-kit-emoji { font-size: 2.8rem; }
+}
+
+.start-banner {
+  margin: 0 0 24px;
+  padding: 22px 24px;
+  background: var(--surface);
+  border: 2px solid var(--link);
+  border-radius: 10px;
+  text-align: center;
+}
+.start-banner-kicker {
+  margin: 0 0 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--link);
+}
+.start-banner-when {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.start-banner-eastern {
+  margin: 10px 0 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+@media (max-width: 640px) {
+  .start-banner-when { font-size: 1.35rem; }
+}
+html { scroll-behavior: smooth; }
+#connect { scroll-margin-top: 16px; }
+.steam-id-warning {
+  margin: 12px 0 14px;
+  padding: 12px 14px;
+  border: 2px solid #e6a23c;
+  border-radius: 8px;
+  background: rgba(230, 162, 60, 0.12);
+  color: #ffd48a;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+}
+.steam-id-warning strong { color: #fff; }
+.hero-panel.connect-jump {
+  text-align: center;
+  padding: 26px 24px 28px;
+  border-color: rgba(110, 182, 255, 0.35);
+}
+.hero-panel.connect-jump h2 {
+  margin: 0 0 16px;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.connect-jump-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: 1px solid var(--link);
+  border-radius: 999px;
+  color: var(--link);
+  font-size: 0.92rem;
+  font-weight: 500;
+  line-height: 1.4;
+  text-decoration: none;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.connect-jump-btn:hover {
+  background: var(--link);
+  border-color: var(--link);
+  color: var(--bg);
+  text-decoration: none;
+}
+.connect-jump-btn-icon {
+  font-size: 1.05rem;
+  line-height: 1;
+}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <p class="nav" style="margin:0 0 12px;font-size:0.9rem"><a href="no-blue-portals-stats.html">Since launch stats →</a></p>
+    <h1>No Blue Portals</h1>
+    <p class="subtitle">Hardcore Zomboid hosted by KenKnobi and qbn</p>
+    
+    <div class="start-banner" data-start="2026-09-05T21:00:00Z">
+      <p class="start-banner-kicker">Outbreak begins</p>
+      <p class="start-banner-when" id="noblues-start-when">Saturday, September 5, 2026 · 5:00 PM Eastern</p>
+      <p class="start-banner-eastern">5:00 PM Eastern</p>
+    </div>
+    
+    <section class="hero-panel rules">
+      <h2>Rules</h2>
+      <ul><li>Play in good faith. We are here to have fun.</li><li>No griefing, stealing from teammates, or sabotaging the group base.</li><li>You must be in the <a href="https://discord.gg/zvFzZhgwnu" target="_blank" rel="noopener noreferrer">Gentlemen Gaming</a> discord server for updates and announcements.</li><li>Respect the whitelist. Do not share accounts, passwords, or server access.</li><li>Use in-game VOIP only while playing. No Discord calls for in-game coordination.</li><li>Craft radios and walkie-talkies, or get used to the solo life.</li></ul>
+    </section>
+    
+    <section class="hero-panel connect-jump">
+      <h2>How to Connect</h2>
+      <a class="connect-jump-btn" href="#connect">
+        <span class="connect-jump-btn-icon" aria-hidden="true">↓</span>
+        View connection instructions
+      </a>
+    </section>
+    
+    <section class="hero-panel starter-kit">
+      <h2>Starter kit</h2>
+      <div class="starter-kit-grid"><div class="starter-kit-item"><span class="starter-kit-emoji">⌚</span><span class="starter-kit-name">Digital Watch</span></div><div class="starter-kit-item"><span class="starter-kit-emoji">🔥</span><span class="starter-kit-name">Matchbox</span></div><div class="starter-kit-item"><span class="starter-kit-emoji">🔦</span><span class="starter-kit-name">Flashlight</span></div><div class="starter-kit-item"><span class="starter-kit-emoji">🎒</span><span class="starter-kit-name">Duffle Bag</span></div><div class="starter-kit-item"><span class="starter-kit-emoji">⚾</span><span class="starter-kit-name">Metal Baseball Bat</span></div><div class="starter-kit-item"><span class="starter-kit-emoji">🔨</span><span class="starter-kit-name">Hammer</span></div><div class="starter-kit-item"><span class="starter-kit-emoji">💧</span><span class="starter-kit-name">Water Bottle</span></div><div class="starter-kit-item"><span class="starter-kit-emoji">🍿</span><span class="starter-kit-name">Chips</span></div></div>
+    </section>
+    <div class="stats"><div class="stat"><div class="stat-value"><span class="stat-emoji">📦</span>25</div><div class="stat-label">Regular mods</div></div><div class="stat"><div class="stat-value"><span class="stat-emoji">🚗</span>92</div><div class="stat-label">Vehicles</div></div><div class="stat"><div class="stat-value"><span class="stat-emoji">⚡</span>?</div><div class="stat-label">Until power out</div></div><div class="stat"><div class="stat-value"><span class="stat-emoji">💧</span>?</div><div class="stat-label">Until water out</div></div></div>
+    <section><h2>Regular mods (25)</h2><table><thead><tr><th>Mod</th><th>Workshop</th></tr></thead><tbody><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3543229299" rel="noopener noreferrer" target="_blank">[B42]PROJECT RV Interior</a></td><td>3543229299</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3508537032" rel="noopener noreferrer" target="_blank">NeatUI_Framework</a></td><td>3508537032</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3437629766" rel="noopener noreferrer" target="_blank">CleanUI [B42.14]</a></td><td>3437629766</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3682936016" rel="noopener noreferrer" target="_blank">Equipment UI - [Standalone]</a></td><td>3682936016</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2847184718" rel="noopener noreferrer" target="_blank">Proximity Inventory</a></td><td>2847184718</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2866258937" rel="noopener noreferrer" target="_blank">Mini Health Panel</a></td><td>2866258937</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3464606086" rel="noopener noreferrer" target="_blank">[B42] Immersive Vehicle Paint</a></td><td>3464606086</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3786849936" rel="noopener noreferrer" target="_blank">Refillable Propane Tanks [B42.20] - Beta 1.8</a></td><td>3786849936</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3776534799" rel="noopener noreferrer" target="_blank">OSRS Experience Bar</a></td><td>3776534799</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3739168410" rel="noopener noreferrer" target="_blank">Obvious Skill Tapes</a></td><td>3739168410</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3788360646" rel="noopener noreferrer" target="_blank">Puffin&#x27;s Retro Relics</a></td><td>3788360646</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3645980077" rel="noopener noreferrer" target="_blank">Project Arcade</a></td><td>3645980077</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3780683663" rel="noopener noreferrer" target="_blank">Cye&#x27;s Push Doors!</a></td><td>3780683663</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3778511497" rel="noopener noreferrer" target="_blank">Skully&#x27;s Zombie Collision</a></td><td>3778511497</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3767639280" rel="noopener noreferrer" target="_blank">Item Arrange</a></td><td>3767639280</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3717262582" rel="noopener noreferrer" target="_blank">Map Reveal</a></td><td>3717262582</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3739595559" rel="noopener noreferrer" target="_blank">Water Pipes</a></td><td>3739595559</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3650112103" rel="noopener noreferrer" target="_blank">StopJumpingOffStairs</a></td><td>3650112103</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3783916125" rel="noopener noreferrer" target="_blank">Death Log (server console)</a></td><td>3783916125</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3619862853" rel="noopener noreferrer" target="_blank">ZombieBuddy</a></td><td>3619862853</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3785253141" rel="noopener noreferrer" target="_blank">Can You Copy</a></td><td>3785253141</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3785253141" rel="noopener noreferrer" target="_blank">Can You Copy - DSP (radio voice filter)</a></td><td>3785253141</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2313387159" rel="noopener noreferrer" target="_blank">Better Sorting</a></td><td>2313387159</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2544353492" rel="noopener noreferrer" target="_blank">Has Been Read</a></td><td>2544353492</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3490188370" rel="noopener noreferrer" target="_blank">Project Cook [Legacy]</a></td><td>3490188370</td></tr></tbody></table></section><section><h2>World</h2><table><thead><tr><th>Setting</th><th>Vanilla</th><th>This world</th></tr></thead><tbody><tr><td>GeneratorFuelConsumption</td><td>0.1</td><td>0.025</td></tr><tr class="striped"><td>LevelForMediaXPCutoff</td><td>3</td><td>10</td></tr><tr><td>Mini-map</td><td>Off</td><td>On</td></tr><tr class="striped"><td>World map known at start</td><td>Off</td><td>On</td></tr><tr><td>Night length</td><td>Normal</td><td>Short</td></tr></tbody></table></section><section><h2>Zombies</h2><table><thead><tr><th>Setting</th><th>Vanilla</th><th>This world</th></tr></thead><tbody><tr><td>Zombie population preset</td><td>Normal</td><td>High (24h IRL) → Very High (Permanent)</td></tr><tr class="striped"><td>Starting zombie population preset</td><td>Normal</td><td>High</td></tr><tr><td>Peak-day zombie population preset</td><td>High</td><td>Very High</td></tr><tr class="striped"><td>Hours until zombies respawn</td><td>0 hours</td><td>504 hours</td></tr><tr><td>Hours chunk is unseen before zombies respawn</td><td>0 hours</td><td>16 hours</td></tr><tr class="striped"><td>Percent of zombies respawned in a chunk</td><td>0%</td><td>5%</td></tr><tr><td>Idle horde size</td><td>20</td><td>10</td></tr><tr class="striped"><td>Multi-hit zombies</td><td>Off</td><td>On</td></tr><tr><td>How long zombies remember players</td><td>Normal</td><td>Long</td></tr><tr class="striped"><td>Sprinter zombie percentage</td><td>0%</td><td>2%</td></tr><tr><td>Knox infection spread</td><td>Blood and saliva</td><td>Saliva only</td></tr></tbody></table></section><section><h2>Meta</h2><table><thead><tr><th>Setting</th><th>Vanilla</th><th>This world</th></tr></thead><tbody><tr><td>Minutes per skill-book page</td><td>2</td><td>0.25</td></tr><tr class="striped"><td>XP multiplier (global)</td><td>1</td><td>2</td></tr></tbody></table></section><section><h2>Server</h2><table><thead><tr><th>Setting</th><th>Vanilla</th><th>This world</th></tr></thead><tbody><tr><td>Chat streams</td><td>/all enabled</td><td>/all disabled</td></tr><tr class="striped"><td>DisplayUserName</td><td>On</td><td>Off</td></tr><tr><td>GlobalChat</td><td>On</td><td>Off</td></tr><tr class="striped"><td>MaxAccountsPerUser</td><td>0</td><td>3</td></tr><tr><td>MouseOverToSeeDisplayName</td><td>On</td><td>Off</td></tr><tr class="striped"><td>Open</td><td>On</td><td>Off</td></tr><tr><td>ShowFirstAndLastName</td><td>Off</td><td>On</td></tr><tr class="striped"><td>Sleep allowed</td><td>Off</td><td>On</td></tr><tr><td>Steam scoreboard</td><td>On</td><td>Off</td></tr><tr class="striped"><td>Delete-all button on trash bins</td><td>Off</td><td>On</td></tr></tbody></table></section><section><h2>Mods</h2><table><thead><tr><th>Setting</th><th>Vanilla</th><th>This world</th></tr></thead><tbody><tr><td>WorkshopItems / Mods</td><td>none</td><td>99 Workshop IDs, 117 mod IDs (25 regular, 92 vehicle)</td></tr><tr class="striped"><td>Mod sandbox options</td><td>none</td><td>12 mod option groups present; values at mod defaults</td></tr></tbody></table></section><section><h2>Vehicles (92)</h2><p class="note">Mods that add cars, campers, or other driveable vehicles (plus the KI5 DAMN library when present).</p><table><thead><tr><th>Mod</th><th>Workshop</th></tr></thead><tbody><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3171167894" rel="noopener noreferrer" target="_blank">that DAMN Library 0.9872b</a></td><td>3171167894</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2409333430" rel="noopener noreferrer" target="_blank">&#x27;91 RANGE ROVER Classic</a></td><td>2409333430</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2642541073" rel="noopener noreferrer" target="_blank">&#x27;92 AM General M998 + M101A3 Trailer</a></td><td>2642541073</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2772575623" rel="noopener noreferrer" target="_blank">&#x27;59 Cadillac Miller-Meteor</a></td><td>2772575623</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2772575623" rel="noopener noreferrer" target="_blank">&#x27;59 Cadillac Miller-Meteor ECTO-1</a></td><td>2772575623</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2805630347" rel="noopener noreferrer" target="_blank">&#x27;84 Mercedes Benz W460</a></td><td>2805630347</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2846036306" rel="noopener noreferrer" target="_blank">&#x27;92 NISSAN Skyline GT-R (R32)</a></td><td>2846036306</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2870394916" rel="noopener noreferrer" target="_blank">&#x27;86 Ford Econoline E150</a></td><td>2870394916</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2870394916" rel="noopener noreferrer" target="_blank">&#x27;86 Ford Econoline E150 Mutt Cutts van</a></td><td>2870394916</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2870394916" rel="noopener noreferrer" target="_blank">&#x27;86 Ford Econoline E150 Mystery Machine</a></td><td>2870394916</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2870394916" rel="noopener noreferrer" target="_blank">&#x27;86 Ford Econoline E150 Payday Escape Van</a></td><td>2870394916</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2870394916" rel="noopener noreferrer" target="_blank">&#x27;86 Ford Econoline E150 Expanded</a></td><td>2870394916</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2873290424" rel="noopener noreferrer" target="_blank">&#x27;70 Dodge Challenger</a></td><td>2873290424</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2886832257" rel="noopener noreferrer" target="_blank">&#x27;82 Jeep J10</a></td><td>2886832257</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2886832257" rel="noopener noreferrer" target="_blank">&#x27;82 Jeep J10 Mellow Yellow</a></td><td>2886832257</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2886832936" rel="noopener noreferrer" target="_blank">&#x27;88 Chevrolet S10</a></td><td>2886832936</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2886833398" rel="noopener noreferrer" target="_blank">&#x27;89 Ford Bronco</a></td><td>2886833398</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2900580391" rel="noopener noreferrer" target="_blank">&#x27;49 Dodge Power Wagon Crew Cab</a></td><td>2900580391</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2913633066" rel="noopener noreferrer" target="_blank">&#x27;70 Plymouth Barracuda</a></td><td>2913633066</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2932547723" rel="noopener noreferrer" target="_blank">&#x27;93 Lincoln Town Car</a></td><td>2932547723</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2932549988" rel="noopener noreferrer" target="_blank">&#x27;89 Isuzu Trooper</a></td><td>2932549988</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2937786633" rel="noopener noreferrer" target="_blank">&#x27;69 Mini Mk2</a></td><td>2937786633</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2937786633" rel="noopener noreferrer" target="_blank">&#x27;69 Mini Mk2 Italian Job</a></td><td>2937786633</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2937786633" rel="noopener noreferrer" target="_blank">&#x27;69 Mini Mk2 Mr Bean</a></td><td>2937786633</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2937786633" rel="noopener noreferrer" target="_blank">&#x27;69 Mini Mk2 Pitbull Special</a></td><td>2937786633</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2942793445" rel="noopener noreferrer" target="_blank">&#x27;90 Pierce Arrow Pumper and Ladder Trucks</a></td><td>2942793445</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2952802178" rel="noopener noreferrer" target="_blank">&#x27;90 Ford F350 Ambulance Type 1</a></td><td>2952802178</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2962175696" rel="noopener noreferrer" target="_blank">&#x27;92 Ford Crown Victoria Police Interceptor</a></td><td>2962175696</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2969343830" rel="noopener noreferrer" target="_blank">&#x27;93 Ford CF8000 Elgin Street Sweeper</a></td><td>2969343830</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2991201484" rel="noopener noreferrer" target="_blank">&#x27;69 Chevrolet Camaro</a></td><td>2991201484</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3001592312" rel="noopener noreferrer" target="_blank">&#x27;93 Ford Mustang</a></td><td>3001592312</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3005903549" rel="noopener noreferrer" target="_blank">&#x27;63 Volkswagen 1300 Beetle</a></td><td>3005903549</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3008795514" rel="noopener noreferrer" target="_blank">&#x27;91 Geo Metro</a></td><td>3008795514</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3026723485" rel="noopener noreferrer" target="_blank">&#x27;67 Shelby GT500 + Eleanor</a></td><td>3026723485</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3034636011" rel="noopener noreferrer" target="_blank">&#x27;89 Dodge Caravan</a></td><td>3034636011</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3041122351" rel="noopener noreferrer" target="_blank">&#x27;63 Volkswagen Type 2 Van</a></td><td>3041122351</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3052360250" rel="noopener noreferrer" target="_blank">&#x27;87 Toyota MR2</a></td><td>3052360250</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3073430075" rel="noopener noreferrer" target="_blank">&#x27;93 Ford F-Series</a></td><td>3073430075</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3088951320" rel="noopener noreferrer" target="_blank">&#x27;93 Ford Taurus</a></td><td>3088951320</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3110911330" rel="noopener noreferrer" target="_blank">&#x27;87 Ford B700/F700 Trucks</a></td><td>3110911330</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3110913021" rel="noopener noreferrer" target="_blank">&#x27;90 BMW 3 Series (E30)</a></td><td>3110913021</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3152529790" rel="noopener noreferrer" target="_blank">&#x27;93 Chevrolet Suburban / Silverado</a></td><td>3152529790</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3152529790" rel="noopener noreferrer" target="_blank">&#x27;93 Chevrolet Suburban / Silverado Expanded</a></td><td>3152529790</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3161951724" rel="noopener noreferrer" target="_blank">&#x27;76 Chevrolet K series</a></td><td>3161951724</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3196180339" rel="noopener noreferrer" target="_blank">&#x27;87 Chevrolet Suburban</a></td><td>3196180339</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3213391371" rel="noopener noreferrer" target="_blank">&#x27;75 Pontiac Grand Prix</a></td><td>3213391371</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3226885926" rel="noopener noreferrer" target="_blank">&#x27;87 Buick Regal</a></td><td>3226885926</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3253385114" rel="noopener noreferrer" target="_blank">&#x27;81 DeLorean DMC-12</a></td><td>3253385114</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3253385114" rel="noopener noreferrer" target="_blank">&#x27;81 DeLorean DMC-12 Time Machine</a></td><td>3253385114</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3258343790" rel="noopener noreferrer" target="_blank">&#x27;68 Pontiac Firebird</a></td><td>3258343790</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3287727378" rel="noopener noreferrer" target="_blank">&#x27;92 Jeep Wrangler YJ</a></td><td>3287727378</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3287727378" rel="noopener noreferrer" target="_blank">&#x27;92 Jeep Wrangler YJ JP18</a></td><td>3287727378</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3292659291" rel="noopener noreferrer" target="_blank">&#x27;89 Volvo 200 Series</a></td><td>3292659291</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3320947974" rel="noopener noreferrer" target="_blank">&#x27;82 Pontiac Firebird</a></td><td>3320947974</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3320947974" rel="noopener noreferrer" target="_blank">&#x27;82 Pontiac Firebird Trans Am KITT</a></td><td>3320947974</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3330403100" rel="noopener noreferrer" target="_blank">Trailers!</a></td><td>3330403100</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3346905070" rel="noopener noreferrer" target="_blank">&#x27;77 Pontiac Firebird</a></td><td>3346905070</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3366300557" rel="noopener noreferrer" target="_blank">&#x27;91 Ford LTD Crown Victoria</a></td><td>3366300557</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3379334330" rel="noopener noreferrer" target="_blank">&#x27;82 Porsche 911</a></td><td>3379334330</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3409287192" rel="noopener noreferrer" target="_blank">&#x27;84 Jeep XJ Cherokee</a></td><td>3409287192</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3413704851" rel="noopener noreferrer" target="_blank">&#x27;85 Chevrolet Caprice / Impala</a></td><td>3413704851</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3413706334" rel="noopener noreferrer" target="_blank">&#x27;85 Pontiac Parisienne</a></td><td>3413706334</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3418252689" rel="noopener noreferrer" target="_blank">&#x27;85 Buick LeSabre</a></td><td>3418252689</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3418253716" rel="noopener noreferrer" target="_blank">&#x27;85 Oldsmobile Delta 88</a></td><td>3418253716</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3428008364" rel="noopener noreferrer" target="_blank">&#x27;86 Chevrolet CUCVs + M101A2 Trailer</a></td><td>3428008364</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3435796523" rel="noopener noreferrer" target="_blank">&#x27;88 Toyota Hilux</a></td><td>3435796523</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3447272250" rel="noopener noreferrer" target="_blank">&#x27;66 Pontiac LeMans / GTO</a></td><td>3447272250</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3490370700" rel="noopener noreferrer" target="_blank">&#x27;73 Ford Falcon</a></td><td>3490370700</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3490370700" rel="noopener noreferrer" target="_blank">&#x27;73 Ford Falcon XB GT Pursuit Special</a></td><td>3490370700</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3504401781" rel="noopener noreferrer" target="_blank">&#x27;91 Nissan 240SX</a></td><td>3504401781</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3539691958" rel="noopener noreferrer" target="_blank">&#x27;91 Ford Ranger</a></td><td>3539691958</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3566868353" rel="noopener noreferrer" target="_blank">&#x27;65 Pontiac Banshee</a></td><td>3566868353</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3570973322" rel="noopener noreferrer" target="_blank">&#x27;89 LAND ROVER Defender</a></td><td>3570973322</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3592777775" rel="noopener noreferrer" target="_blank">&#x27;84 Cadillac DeVille</a></td><td>3592777775</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3596903773" rel="noopener noreferrer" target="_blank">&#x27;84 Buick Electra</a></td><td>3596903773</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3601417745" rel="noopener noreferrer" target="_blank">&#x27;84 Oldsmobile 98 Regency</a></td><td>3601417745</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3614034284" rel="noopener noreferrer" target="_blank">&#x27;85 Chevrolet Step-Van</a></td><td>3614034284</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3614034284" rel="noopener noreferrer" target="_blank">&#x27;85 Chevrolet Step-Van Expanded</a></td><td>3614034284</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3631989559" rel="noopener noreferrer" target="_blank">&#x27;69 Dodge Charger</a></td><td>3631989559</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3642935062" rel="noopener noreferrer" target="_blank">&#x27;70 Plymouth Road Runner</a></td><td>3642935062</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3670063857" rel="noopener noreferrer" target="_blank">&#x27;70 Ford Escort</a></td><td>3670063857</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3670064951" rel="noopener noreferrer" target="_blank">Campers!</a></td><td>3670064951</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3684254299" rel="noopener noreferrer" target="_blank">&#x27;84 Chevrolet Corvette</a></td><td>3684254299</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3703948448" rel="noopener noreferrer" target="_blank">&#x27;79 Chevrolet Camaro</a></td><td>3703948448</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3726526329" rel="noopener noreferrer" target="_blank">&#x27;78 Lamborghini Countach</a></td><td>3726526329</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3730833846" rel="noopener noreferrer" target="_blank">&#x27;76 Chrysler New Yorker</a></td><td>3730833846</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3743371090" rel="noopener noreferrer" target="_blank">&#x27;73 NISSAN Skyline GT-R</a></td><td>3743371090</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3756938756" rel="noopener noreferrer" target="_blank">&#x27;69 Ford Mustang</a></td><td>3756938756</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3756938756" rel="noopener noreferrer" target="_blank">&#x27;69 Ford Mustang Extra Textures</a></td><td>3756938756</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3766571591" rel="noopener noreferrer" target="_blank">&#x27;70 Chevrolet Chevelle / El Camino</a></td><td>3766571591</td></tr><tr><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3770890864" rel="noopener noreferrer" target="_blank">&#x27;91 Lexus LS400</a></td><td>3770890864</td></tr><tr class="striped"><td><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3779315249" rel="noopener noreferrer" target="_blank">&#x27;87 Toyota Corolla AE92</a></td><td>3779315249</td></tr></tbody></table></section>
+    <section class="connect" id="connect">
+      <h2>How to connect</h2>
+      <div class="connect-grid">
+        <div class="connect-item"><a class="connect-thumb screenshot-modal-open" href="assets/no-blue-portals/add-server.png" data-alt="Add favorite server screen"><img src="assets/no-blue-portals/add-server.png" alt="Add favorite server screen"></a></div><div class="connect-item"><a class="connect-thumb screenshot-modal-open" href="assets/no-blue-portals/connect.png" data-alt="Add New Account login screen"><img src="assets/no-blue-portals/connect.png" alt="Add New Account login screen"></a></div>
+      </div>
+      <ol class="connect-steps">
+        <li>In the main menu, open <strong>Favorites</strong> and add a server with these settings (<a class="screenshot-modal-open" href="assets/no-blue-portals/add-server.png" data-alt="Add favorite server screen">screenshot</a>).
+          <ul class="connect-fields">
+<li><span class="connect-label">Server name</span><code class="connect-value">No Blue Portals</code></li>
+<li><span class="connect-label">IP / Domain</span><code class="connect-value">gamebot.qbn.tv</code></li>
+<li><span class="connect-label">Port</span><code class="connect-value">16281</code></li>
+<li><span class="connect-label">Server password</span><code class="connect-value connect-value-secret" data-secret="qbnrox!!1" tabindex="0" role="button" aria-label="Click to reveal server password">Click to reveal</code></li>
+</ul>
+        </li>
+        <li>To get on the whitelist, send your <strong>Steam ID</strong>. If you&apos;re friends with <strong>qbn</strong> on Steam, he&apos;s already added you to the whitelist.
+          <p class="steam-id-warning">Your Steam ID is <strong>not</strong> your Steam friend code.</p>
+          <ol>
+            <li>Open <strong>Steam</strong> and make sure you are signed in.</li>
+            <li>Click your <strong>profile name</strong> in the top menu, then <strong>Account details</strong> (<a class="screenshot-modal-open" href="assets/no-blue-portals/steam-menu.png" data-alt="Steam profile menu">screenshot</a>).</li>
+            <li>Copy the <strong>17-digit Steam ID</strong> shown at the top of the page (<a class="screenshot-modal-open" href="assets/no-blue-portals/steam-account.png" data-alt="Steam account details">screenshot</a>).</li>
+            <li>Post that ID in the <strong><a href="https://discord.com/channels/423919761655726090/1168978158557601792" target="_blank" rel="noopener noreferrer">#project-zomboid</a></strong> chat in the <a href="https://discord.gg/zvFzZhgwnu" target="_blank" rel="noopener noreferrer">Gentlemen Gaming</a> discord and @ <strong>qbn</strong>. This ID is a public value any Steam friend can fetch, so not to worry.</li>
+          </ol>
+        </li>
+        <li>Next, in Zomboid click <strong>Add New Account</strong>. Here you will self register by entering a username and password, your user account will be created for you (<a class="screenshot-modal-open" href="assets/no-blue-portals/connect.png" data-alt="Add New Account login screen">screenshot</a>). Check <strong>Remember password</strong>. Do <strong>not</strong> check <strong>Use Steam Relay</strong>, then click <strong>Save</strong>. Do not lose your username and password. You&apos;re welcome to create up to 3 &quot;accounts&quot; so you can have multiple characters.</li>
+      </ol>
+      
+      <div class="connect-note">
+        <a class="connect-thumb screenshot-modal-open" href="assets/no-blue-portals/port-warning.png" data-alt="Port 16282 closed warning during load"><img src="assets/no-blue-portals/port-warning.png" alt="Port 16282 closed warning during load"></a>
+        <p class="connect-note-text">If you see a red warning that port 16282 is closed while loading, you can ignore it. The port is open — this is a known cosmetic bug in the game client.</p>
+      </div>
+      
+      <div class="connect-note">
+        <a class="connect-thumb screenshot-modal-open" href="assets/no-blue-portals/workshop-version.png" data-alt="Workshop item version mismatch screen"><img src="assets/no-blue-portals/workshop-version.png" alt="Workshop item version mismatch screen"></a>
+        <p class="connect-note-text">If you see &ldquo;Workshop item version is different than the server&apos;s,&rdquo; that means the server needs a restart. Contact <strong>@qbn</strong> in the <a href="https://discord.com/channels/423919761655726090/1168978158557601792" target="_blank" rel="noopener noreferrer">#project-zomboid</a> channel.</p>
+      </div>
+      
+<div class="screenshot-modal" id="screenshot-modal" hidden>
+  <div class="screenshot-modal-backdrop" data-close></div>
+  <div class="screenshot-modal-dialog" role="dialog" aria-modal="true" aria-label="Screenshot">
+    <button type="button" class="screenshot-modal-close" aria-label="Close">&times;</button>
+    <img src="" alt="">
+  </div>
+</div>
+    </section>
+    
+  </div>
+  <script>
+(function () {
+  var banner = document.querySelector(".start-banner");
+  var when = document.getElementById("noblues-start-when");
+  if (!banner || !when) return;
+  var start = new Date(banner.getAttribute("data-start"));
+  if (Number.isNaN(start.getTime())) return;
+  when.textContent = new Intl.DateTimeFormat(undefined, {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    timeZoneName: "short",
+  }).format(start);
+})();
+
+(function () {
+  document.querySelectorAll(".connect-value-secret").forEach(function (el) {
+    function reveal() {
+      if (el.classList.contains("revealed")) return;
+      el.textContent = el.getAttribute("data-secret");
+      el.classList.add("revealed");
+      el.setAttribute("aria-label", "Server password");
+      el.removeAttribute("role");
+      el.removeAttribute("tabindex");
+    }
+    el.addEventListener("click", reveal);
+    el.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        reveal();
+      }
+    });
+  });
+})();
+
+(function () {
+  var modal = document.getElementById("screenshot-modal");
+  if (!modal) return;
+  var img = modal.querySelector("img");
+  function openModal(src, alt) {
+    img.src = src;
+    img.alt = alt || "Screenshot";
+    modal.classList.add("open");
+    modal.removeAttribute("hidden");
+    document.body.style.overflow = "hidden";
+  }
+  function closeModal() {
+    modal.classList.remove("open");
+    modal.setAttribute("hidden", "");
+    img.removeAttribute("src");
+    document.body.style.overflow = "";
+  }
+  document.querySelectorAll(".screenshot-modal-open").forEach(function (el) {
+    el.addEventListener("click", function (e) {
+      e.preventDefault();
+      var thumb = el.querySelector("img");
+      openModal(
+        el.getAttribute("href"),
+        el.getAttribute("data-alt") || (thumb && thumb.getAttribute("alt")) || "Screenshot"
+      );
+    });
+  });
+  modal.querySelectorAll("[data-close], .screenshot-modal-close").forEach(function (el) {
+    el.addEventListener("click", closeModal);
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && modal.classList.contains("open")) closeModal();
+  });
+})();
+</script>
+</body>
+</html>
